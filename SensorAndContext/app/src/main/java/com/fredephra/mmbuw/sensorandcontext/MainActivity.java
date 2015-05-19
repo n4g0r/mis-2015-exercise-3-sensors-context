@@ -39,6 +39,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         costumView = (CostumDrawableView) findViewById(R.id.my_canvas);
         t=(TextView)findViewById(R.id.textView);
         accData=(TextView)findViewById(R.id.accData);
