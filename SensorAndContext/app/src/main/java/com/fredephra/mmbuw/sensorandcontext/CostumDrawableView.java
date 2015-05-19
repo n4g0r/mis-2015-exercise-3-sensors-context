@@ -17,6 +17,9 @@ import android.view.View;
 
 import org.w3c.dom.Attr;
 
+import java.util.LinkedList;
+import java.util.Vector;
+
 /**
  * Created by Ephra on 19.05.2015.
  */
@@ -40,7 +43,8 @@ public class CostumDrawableView extends View{
         Log.i(TAG, "Height" + h + "- Width" + w);
 
         drawBox(canvas);
-        drawLine(canvas);
+        drawLine(canvas, );
+        Vector< 3> d;
     }
 
     // draw functions
@@ -55,7 +59,7 @@ public class CostumDrawableView extends View{
         canvas.drawRect(myRect, blue);
     }
 
-    private void drawLine(Canvas canvas){
+    private void drawLine(Canvas canvas, LinkedList<float[]> point_queue){
         Path p = new Path();
 
         Paint paint = new Paint();
