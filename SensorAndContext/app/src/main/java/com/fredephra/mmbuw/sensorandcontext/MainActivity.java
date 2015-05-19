@@ -1,18 +1,22 @@
 package com.fredephra.mmbuw.sensorandcontext;
 
 import android.content.Context;
+
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+
+
 import android.widget.SeekBar;
 import android.widget.TextView;
-
 
 
 public class MainActivity extends ActionBarActivity implements SensorEventListener {
@@ -25,17 +29,21 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     private TextView t;
     private TextView accData;
 
+    private CostumDrawableView costumView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        costumView = (CostumDrawableView) findViewById(R.id.my_canvas);
         t=(TextView)findViewById(R.id.textView);
         accData=(TextView)findViewById(R.id.accData);
         setupSeekBar();
         setupSensor();
-
     }
+
+    
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something here if sensor accuracy changes.
@@ -84,6 +92,7 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
 
         return super.onOptionsItemSelected(item);
     }
+
     public void setPollingrate(int progress){
         Log.i(TAG, "seekbar: " + progress);
         if (progress==0) {
@@ -127,4 +136,5 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
             }
         });
     }
+
 }
