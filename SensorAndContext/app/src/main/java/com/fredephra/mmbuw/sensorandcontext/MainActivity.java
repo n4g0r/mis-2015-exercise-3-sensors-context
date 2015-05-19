@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.LinkedList;
+
 
 public class MainActivity extends ActionBarActivity implements SensorEventListener {
 
@@ -28,8 +30,9 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
     private int pollingrate=0;
     private TextView t;
     private TextView accData;
-
     private CostumDrawableView costumView;
+    private LinkedList<float[]> dataqueue=new LinkedList<float[]>();
+
 
 
     @Override
@@ -39,11 +42,14 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         costumView = (CostumDrawableView) findViewById(R.id.my_canvas);
         t=(TextView)findViewById(R.id.textView);
         accData=(TextView)findViewById(R.id.accData);
+        for(int i=0; i<1024; i++){
+            dataqueue.add(accelerationData);
+        }
         setupSeekBar();
         setupSensor();
     }
 
-    
+
     @Override
     public final void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do something here if sensor accuracy changes.
@@ -53,7 +59,8 @@ public class MainActivity extends ActionBarActivity implements SensorEventListen
         accelerationData = event.values;
         //Log.i(TAG, "accdata: "+accelerationData[0]+" "+accelerationData[1]+" " +accelerationData[2]);
         accData.setText(accelerationData[0] + " " + accelerationData[1] + " " +accelerationData[2]);
-
+        dataqueue.add(event.values);
+        dataqueue.removeFirst();
     }
 
 
