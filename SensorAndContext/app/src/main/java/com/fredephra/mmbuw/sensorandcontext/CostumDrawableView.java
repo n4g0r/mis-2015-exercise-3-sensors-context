@@ -17,15 +17,18 @@ import android.view.View;
 
 import org.w3c.dom.Attr;
 
+import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Vector;
 
-/**
- * Created by Ephra on 19.05.2015.
- */
+
 public class CostumDrawableView extends View{
 
     private static final String TAG = "DRAW" ;
+    private Canvas myCanvas= new Canvas();
+
 
     public CostumDrawableView(Context context) {
         super(context);
@@ -33,44 +36,89 @@ public class CostumDrawableView extends View{
     public CostumDrawableView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+    private LinkedList<float[]> point_queue;
+    private double[] fftdata=new double[0];
+    private static final int width= 1080;
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
-        Log.i(TAG, canvas.getClipBounds().toString());
-        int h = canvas.getHeight();
-        int w = canvas.getWidth();
-        Log.i(TAG, "Height" + h + "- Width" + w);
-
         drawBox(canvas);
-        drawLine(canvas, );
-        Vector< 3> d;
+        drawLines(canvas);
     }
 
     // draw functions
     private void drawBox(Canvas canvas){
-
-        Rect myRect = new Rect();
-        myRect.set(0,0,500,100);
+        //System.out.println("drawbox: "+Arrays.toString(fftdata));
         Paint blue = new Paint();
         blue.setColor(Color.BLUE);
-        blue.setStyle(Paint.Style.STROKE);
+        blue.setStyle(Paint.Style.FILL);
+        int bot=1350;
+        for(int i = 0; i < fftdata.length; i++) {
+            Rect myRect = new Rect();
 
-        canvas.drawRect(myRect, blue);
+            int top=bot-(int)fftdata[i];
+            int left=i*(width/fftdata.length);
+            int right=(i+1)*(width/fftdata.length);
+            myRect.set(left, top, right, bot);
+
+
+            canvas.drawRect(myRect, blue);
+        }
     }
 
-    private void drawLine(Canvas canvas, LinkedList<float[]> point_queue){
-        Path p = new Path();
+    private void drawLines(Canvas canvas){
+        Path grey = new Path();
+        Path red = new Path();
+        Path green = new Path();
+        Path blue = new Path();
+        Path black = new Path();
+        grey.moveTo(0, 200);
+        grey.lineTo(width, 200);
+        grey.moveTo(0, 400);
+        grey.lineTo(width, 400);
+        grey.moveTo(0, 700);
+        grey.lineTo(width, 700);
+        grey.moveTo(0, 1200);
+        grey.lineTo(width, 1200);
 
-        Paint paint = new Paint();
-        paint.setColor(Color.RED);
-        paint.setStyle(Paint.Style.STROKE);
-        p.moveTo(20, 20);
-        p.lineTo(100, 200);
-        p.lineTo(200, 100);
-        p.lineTo(240, 155);
-        p.lineTo(250, 175);
-        p.lineTo(20, 20);
-        canvas.drawPath(p, paint);
+        red.moveTo(point_queue.get(0)[0],300);
+        green.moveTo(point_queue.get(0)[1], 600);
+        blue.moveTo(point_queue.get(0)[2], 900);
+        black.moveTo(point_queue.get(0)[3], 1150);
+        for (int i = 0; i < point_queue.size();i++){
+            float[] point = point_queue.get(i);
+            red.lineTo(i+2, point[0] * -10 + 300);
+            green.lineTo(i+2, point[1] * -10 + 600);
+            blue.lineTo(i+2, point[2] * -10 + 900);
+            black.lineTo(i+2, point[3] * -10 + 1200);
+        }
+
+        Paint color = new Paint();
+        color.setStyle(Paint.Style.STROKE);
+        color.setColor(Color.BLACK);
+        canvas.drawPath(grey,color);
+        color.setColor(Color.RED);
+        canvas.drawPath(red, color);
+        color.setColor(Color.GREEN);
+        canvas.drawPath(green, color);
+        color.setColor(Color.BLUE);
+        canvas.drawPath(blue, color);
+        color.setColor(Color.BLACK);
+        canvas.drawPath(black, color);
+        myCanvas = canvas;
+    }
+
+    public void setQueue(LinkedList<float[]> queue){
+        point_queue = queue;
+        invalidate();
+    }
+
+    public void setFFT(double[] fftresult){
+        fftdata = fftresult;
+        //invalidate();
+    }
+
+    public Canvas getMyCanvas(){
+        return myCanvas;
     }
 }

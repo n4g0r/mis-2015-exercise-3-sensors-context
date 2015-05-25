@@ -1,3 +1,5 @@
+package com.fredephra.mmbuw.sensorandcontext;
+
 /*
  *  Copyright 2006-2007 Columbia University.
  *
